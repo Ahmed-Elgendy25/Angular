@@ -6,6 +6,9 @@ import { Component, input } from "@angular/core";
     imports: [],
     templateUrl: "./traffic.component.html",
     styleUrl: "./traffic.component.css",
+    host: {
+        id: "traffic",
+    },
 })
 export class TrafficComponent {
     readonly dummyTrafficData = input<
