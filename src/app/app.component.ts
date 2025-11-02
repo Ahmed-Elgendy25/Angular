@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { HeaderComponent } from "./header/header.component";
 import { ServerStatusComponent } from "./dashboard/server-status/server-status.component";
 import { TrafficComponent } from "./dashboard/traffic/traffic.component";
@@ -17,7 +17,7 @@ import { DashboardItemComponent } from "./dashboard/dashboard-item/dashboard-ite
         DashboardItemComponent,
     ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     dummyTrafficData = [
         {
             id: "d1",
@@ -51,7 +51,8 @@ export class AppComponent {
     maxTraffic = Math.max(...this.dummyTrafficData.map((data) => data.value));
     currentStatus: "online" | "offline" | "unknown" = "offline";
 
-    constructor() {
+    constructor() {}
+    ngOnInit() {
         setInterval(() => {
             const rnd = Math.random();
             if (rnd < 0.5) this.currentStatus = "online";
