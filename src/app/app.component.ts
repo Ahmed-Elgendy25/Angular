@@ -1,4 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import {
+    AfterViewInit,
+    Component,
+    DestroyRef,
+    inject,
+    OnChanges,
+    OnInit,
+} from "@angular/core";
 import { HeaderComponent } from "./header/header.component";
 import { ServerStatusComponent } from "./dashboard/server-status/server-status.component";
 import { TrafficComponent } from "./dashboard/traffic/traffic.component";
@@ -17,7 +24,7 @@ import { DashboardItemComponent } from "./dashboard/dashboard-item/dashboard-ite
         DashboardItemComponent,
     ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
     dummyTrafficData = [
         {
             id: "d1",
@@ -51,13 +58,23 @@ export class AppComponent implements OnInit {
     maxTraffic = Math.max(...this.dummyTrafficData.map((data) => data.value));
     currentStatus: "online" | "offline" | "unknown" = "offline";
 
+    private removeRef = inject(DestroyRef);
+    interval: ReturnType<typeof setInterval> | undefined;
     constructor() {}
     ngOnInit() {
-        setInterval(() => {
+        this.interval = setInterval(() => {
             const rnd = Math.random();
             if (rnd < 0.5) this.currentStatus = "online";
             else if (rnd < 0.9) this.currentStatus = "offline";
             else this.currentStatus = "unknown";
         }, 3000);
+
+        this.removeRef.onDestroy(() => {
+            clearInterval(this.interval);
+        });
+    }
+
+    ngAfterViewInit() {
+        console.log("AFTER VIEW INIT");
     }
 }
